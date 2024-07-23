@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.boards {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.board {
+    margin: 0 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
+    gap: 1px; /* Add a small gap between cells for visibility */
+}
+
+.grid div {
+    border: 1px solid #000;
+    width: 30px;
+    height: 30px;
+    background-color: lightblue; /* Set the background color to blue */
+}
+
+.ship {
+    background-color: gray;
+}
+
+.hit {
+    background-color: red;
+}
+
+.miss {
+    background-color: blue;
+}
