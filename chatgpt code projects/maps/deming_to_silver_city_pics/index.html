@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route from Deming to Silver City</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        :root {
+            --icon-pic-size: 100px;
+        }
+
+        #map {
+            height: 100vh; /* Full viewport height */
+            width: 100%;   /* Full viewport width */
+        }
+        .custom-icon {
+            background-image: url('https://lascruces.com/wp-content/themes/Skeleton/assets/images/Deming-Tourism-14-websized-1024x574.jpg'); /* Replace with your Deming image URL */
+            background-size: cover;
+            width: var(--icon-pic-size); /* Adjust icon size */
+            height: var(--icon-pic-size); /* Adjust icon size */
+            border-radius: 50%;
+            border: 2px solid #fff; /* White border for visibility */
+        }
+        .custom-icon-silver {
+            background-image: url('https://th.bing.com/th/id/OIP.evPbg5GTAEBZCKUihSseLgHaD4?rs=1&pid=ImgDetMain'); /* Replace with your Silver City image URL */
+            background-size: cover;
+            width: var(--icon-pic-size); /* Adjust icon size */
+            height: var(--icon-pic-size); /* Adjust icon size */
+            border-radius: 50%;
+            border: 2px solid #fff; /* White border for visibility */
+        }
+        .travel-time {
+            position: fixed; /* Ensure it stays visible */
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 3px;
+            box-shadow: 0 0 3px rgba(0,0,0,0.3);
+            z-index: 1000; /* Ensure it appears above other elements */
+        }
+        .marker-label {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 3px;
+            box-shadow: 0 0 3px rgba(0,0,0,0.3);
+            font-size: 14px;
+            white-space: nowrap;
+            transform: translate(-50%, -100%);
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="travel-time" class="travel-time">Loading...</div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <!-- Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+	var iconSizeForPic = 100;
+        // Initialize the map
+        var map = L.map('map').setView([32.2664, -107.3378], 8); // Centered around New Mexico
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Custom icons
+        var demingIcon = L.divIcon({
+            className: 'custom-icon',
+            iconSize: [iconSizeForPic, iconSizeForPic]
+        });
+        var silverCityIcon = L.divIcon({
+            className: 'custom-icon-silver',
+            iconSize: [iconSizeForPic, iconSizeForPic]
+        });
+
+        // Create routing control
+        L.Routing.control({
+            waypoints: [
+                L.latLng(32.2664, -107.7669), // Deming, NM
+                L.latLng(32.7806, -108.2710)  // Silver City, NM
+            ],
+            routeWhileDragging: true,
+            router: L.Routing.osrmv1({
+                language: 'en',
+                profile: 'car',
+                serviceUrl: 'https://router.project-osrm.org/route/v1/'
+            }),
+            createMarker: function() { return null; } // Remove default markers
+        }).addTo(map);
+
+        // Add custom markers with text labels
+        var demingMarker = L.marker([32.2664, -107.7669], {icon: demingIcon}).addTo(map);
+        var silverCityMarker = L.marker([32.7806, -108.2710], {icon: silverCityIcon}).addTo(map);
+
+        // Add labels
+        var demingLabel = L.divIcon({
+            className: 'marker-label',
+            html: 'Deming, NM',
+            iconSize: [100, 20]
+        });
+        var silverCityLabel = L.divIcon({
+            className: 'marker-label',
+            html: 'Silver City, NM',
+            iconSize: [100, 20]
+        });
+
+        L.marker([32.2664+.05, -107.7669], {icon: demingLabel}).addTo(map);
+        L.marker([32.7806+.05, -108.2710], {icon: silverCityLabel}).addTo(map);
+        // Fetch route and display travel time
+        fetch('https://router.project-osrm.org/route/v1/car/107.7669,32.2664;108.2710,32.7806?overview=false')
+            .then(response => response.json())
+            .then(data => {
+                var duration = data.routes[0].duration; // Duration in seconds
+                var travelTime = (duration / 60).toFixed(0); // Convert to minutes
+                document.getElementById('travel-time').innerText = 'Estimated Travel Time: ' + travelTime + ' minutes';
+            });
+    </script>
+</body>
+</html>

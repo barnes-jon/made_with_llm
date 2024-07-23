@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map of Yucatán Peninsula with Search</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet Control Geocoder CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <style>
+        #map {
+            height: 100vh; /* Full viewport height */
+            width: 100%;   /* Full viewport width */
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([20.6511, -88.0784], 7); // Centered around the Yucatán Peninsula
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Optional: Add a marker
+        L.marker([20.6511, -88.0784]).addTo(map)
+            .bindPopup('Yucatán Peninsula')
+            .openPopup();
+
+        // Initialize geocoder
+        var geocoder = L.Control.Geocoder.nominatim();
+
+        // Add geocoder control
+        L.Control.geocoder({
+            geocoder: geocoder,
+            placeholder: 'Search for a location...'
+        }).addTo(map);
+    </script>
+</body>
+</html>

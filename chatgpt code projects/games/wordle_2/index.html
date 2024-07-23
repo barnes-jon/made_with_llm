@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Wordle Game</h1>
+    <div id="game-board"></div>
+    <input type="text" id="user-input" maxlength="5" placeholder="Enter a 5-letter word">
+    <button onclick="submitWord()">Submit</button>
+    <p id="message"></p>
+    <div id="word-list">
+        <h3>Update Word List:</h3>
+        <textarea id="word-input" rows="10" cols="30">apple,grape,pearl,flame,beach</textarea>
+        <button onclick="updateWordList()">Update</button>
+    </div>
+    <div id="alphabet"></div>
+    <script src="script.js"></script>
+</body>
+</html>

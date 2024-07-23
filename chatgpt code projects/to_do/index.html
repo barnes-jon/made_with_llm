@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Add a new task">
+    <button onclick="addTask()">Add Task</button>
+
+    <div id="folders">
+        <div class="folder" id="folder-0" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2>School</h2>
+            <span class="delete-folder" onclick="deleteFolder('folder-0')">x</span>
+            <ul id="school"></ul>
+        </div>
+        <div class="folder" id="folder-1" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2>Grocery Shopping</h2>
+            <span class="delete-folder" onclick="deleteFolder('folder-1')">x</span>
+            <ul id="grocery"></ul>
+        </div>
+        <div class="folder" id="folder-2" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2>Others</h2>
+            <span class="delete-folder" onclick="deleteFolder('folder-2')">x</span>
+            <ul id="others"></ul>
+        </div>
+    </div>
+
+    <input type="text" id="folderInput" placeholder="Add a new folder">
+    <button onclick="addFolder()">Add Folder</button>
+
+    <script src="script.js"></script>
+</body>
+</html>

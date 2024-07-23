@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+input, button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+#folders {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.folder {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 30%;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.folder h2 {
+    text-align: center;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+li.completed label {
+    text-decoration: line-through;
+}
+
+.delete-folder {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    color: red;
+}
