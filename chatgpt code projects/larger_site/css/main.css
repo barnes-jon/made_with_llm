@@ -1,0 +1,7 @@
+main {
+  margin-left: 220px; /* Account for sidebar width */
+  padding: 20px;
+}
+article {
+  margin-bottom: 20px;
+}
