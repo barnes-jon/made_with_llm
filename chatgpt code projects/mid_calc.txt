@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .calculator {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 300px;
+        }
+        #display {
+            width: 100%;
+            height: 40px;
+            font-size: 20px;
+            text-align: right;
+            margin-bottom: 10px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        button {
+            width: 100%;
+            height: 40px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+        }
+        button:hover {
+            background-color: #d0d0d0;
+        }
+        .operator {
+            background-color: #f0a030;
+            color: white;
+        }
+        .operator:hover {
+            background-color: #e09020;
+        }
+        .function {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .function:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <div class="buttons">
+            <button class="function" onclick="appendToDisplay('(')">(</button>
+            <button class="function" onclick="appendToDisplay(')')">)</button>
+            <button class="function" onclick="appendToDisplay('Math.pow(')">x^y</button>
+            <button class="function" onclick="appendToDisplay('Math.sqrt(')">√</button>
+            <button onclick="clearDisplay()">C</button>
+            
+            <button class="function" onclick="appendToDisplay('Math.sin(')">sin</button>
+            <button class="function" onclick="appendToDisplay('Math.cos(')">cos</button>
+            <button class="function" onclick="appendToDisplay('Math.tan(')">tan</button>
+            <button class="function" onclick="appendToDisplay('Math.log(')">log</button>
+            <button class="function" onclick="appendToDisplay('Math.exp(')">exp</button>
+            
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('/')">/</button>
+            <button class="function" onclick="appendToDisplay('Math.PI')">π</button>
+            
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('*')">*</button>
+            <button class="function" onclick="appendToDisplay('Math.E')">e</button>
+            
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            <button class="operator" onclick="appendToDisplay('%')">%</button>
+            
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button onclick="calculate()">=</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            <button class="function" onclick="appendToDisplay('Math.abs(')">|x|</button>
+        </div>
+    </div>
+
+    <script>
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        function calculate() {
+            try {
+                const expression = document.getElementById('display').value
+                    .replace(/π/g, 'Math.PI')
+                    .replace(/e/g, 'Math.E');
+                const result = eval(expression);
+                document.getElementById('display').value = result;
+            } catch (error) {
+                document.getElementById('display').value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
