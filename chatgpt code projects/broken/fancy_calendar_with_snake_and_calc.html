@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jon's LLM Made Apps</title>
+    <style>
+        body, html {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #f0f0f0;
+        }
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 1.5rem;
+        }
+        .content-container {
+            display: flex;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 1rem;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .main-content {
+            flex: 1;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            display: flex;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .calendar {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .todo {
+            flex: 1;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        .day {
+            padding: 5px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .day.current {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .day.selected {
+            background-color: #2196F3;
+            color: white;
+        }
+        .todo-list {
+            margin-top: 20px;
+        }
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            background-color: #f0f0f0;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+        .todo-item button {
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 2px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        #gameCanvas {
+            border: 1px solid #000;
+            display: block;
+            margin: 0 auto;
+        }
+        #calculator {
+            width: 300px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        #display {
+            width: 100%;
+            height: 40px;
+            font-size: 20px;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+        .buttons button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #e0e0e0;
+            cursor: pointer;
+        }
+        .buttons button:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            Jon's LLM Made Apps
+        </header>
+        <div class="content-container">
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="#" onclick="showApp('calendar')">Calendar App</a></li>
+                    <li><a href="#" onclick="showApp('todo')">To-Do List</a></li>
+                    <li><a href="#" onclick="showApp('snake')">Snake Game</a></li>
+                    <li><a href="#" onclick="showApp('calculator')">Calculator</a></li>
+                </ul>
+            </nav>
+            <main class="main-content">
+                <div class="container">
+                    <div class="calendar">
+                        <div class="header">
+                            <button id="prevMonth">&lt;</button>
+                            <h2 id="currentMonth"></h2>
+                            <button id="nextMonth">&gt;</button>
+                        </div>
+                        <div class="days" id="calendarDays"></div>
+                    </div>
+                    <div class="todo">
+                        <h2>To-Do List</h2>
+                        <div id="selectedDate"></div>
+                        <input type="text" id="todoInput" placeholder="Add a new task">
+                        <button onclick="addTodo()">Add</button>
+                        <div id="todoList" class="todo-list"></div>
+                    </div>
+                </div>
+                <div id="snakeGame">
+                    <h2>Snake Game</h2>
+                    <canvas id="gameCanvas" width="400" height="400"></canvas>
+                    <p>Use arrow keys to control the snake. Eat the red food to grow!</p>
+                </div>
+                <div id="calculator">
+                    <input type="text" id="display" readonly>
+                    <div class="buttons">
+                        <button onclick="clearDisplay()">C</button>
+                        <button onclick="appendToDisplay('(')">(</button>
+                        <button onclick="appendToDisplay(')')">)</button>
+                        <button onclick="appendToDisplay('/')">/</button>
+                        <button onclick="appendToDisplay('7')">7</button>
+                        <button onclick="appendToDisplay('8')">8</button>
+                        <button onclick="appendToDisplay('9')">9</button>
+                        <button onclick="appendToDisplay('*')">*</button>
+                        <button onclick="appendToDisplay('4')">4</button>
+                        <button onclick="appendToDisplay('5')">5</button>
+                        <button onclick="appendToDisplay('6')">6</button>
+                        <button onclick="appendToDisplay('-')">-</button>
+                        <button onclick="appendToDisplay('1')">1</button>
+                        <button onclick="appendToDisplay('2')">2</button>
+                        <button onclick="appendToDisplay('3')">3</button>
+                        <button onclick="appendToDisplay('+')">+</button>
+                        <button onclick="appendToDisplay('0')">0</button>
+                        <button onclick="appendToDisplay('.')">.</button>
+                        <button onclick="calculate()">=</button>
+                        <button onclick="appendToDisplay('**')">^</button>
+                        <button onclick="appendToDisplay('Math.sqrt(')">√</button>
+                        <button onclick="appendToDisplay('Math.sin(')">sin</button>
+                        <button onclick="appendToDisplay('Math.cos(')">cos</button>
+                        <button onclick="appendToDisplay('Math.tan(')">tan</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Calendar and Todo List Code
+        const currentMonthElement = document.getElementById('currentMonth');
+        const calendarDaysElement = document.getElementById('calendarDays');
+        const prevMonthButton = document.getElementById('prevMonth');
+        const nextMonthButton = document.getElementById('nextMonth');
+        const selectedDateElement = document.getElementById('selectedDate');
+        const todoInput = document.getElementById('todoInput');
+        const todoList = document.getElementById('todoList');
+
+        let currentDate = new Date();
+        let selectedDate = new Date();
+        let todos = {};
+
+        function updateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            currentMonthElement.textContent = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            calendarDaysElement.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                calendarDaysElement.innerHTML += '<div></div>';
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.textContent = day;
+
+                if (year === new Date().getFullYear() && month === new Date().getMonth() && day === new Date().getDate()) {
+                    dayElement.classList.add('current');
+                }
+
+                if (year === selectedDate.getFullYear() && month === selectedDate.getMonth() && day === selectedDate.getDate()) {
+                    dayElement.classList.add('selected');
+                }
+
+                dayElement.addEventListener('click', () => selectDate(new Date(year, month, day)));
+                calendarDaysElement.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            updateCalendar();
+            updateTodoList();
+        }
+
+        function updateTodoList() {
+            const dateString = selectedDate.toDateString();
+            selectedDateElement.textContent = dateString;
+            todoList.innerHTML = '';
+
+            if (todos[dateString]) {
+                todos[dateString].forEach((todo, index) => {
+                    const todoItem = document.createElement('div');
+                    todoItem.classList.add('todo-item');
+                    todoItem.innerHTML = `
+                        ${todo}
+                        <button onclick="removeTodo(${index})">Remove</button>
+                    `;
+                    todoList.appendChild(todoItem);
+                });
+            }
+        }
+
+        function addTodo() {
+            const todo = todoInput.value.trim();
+            if (todo) {
+                const dateString = selectedDate.toDateString();
+                if (!todos[dateString]) {
+                    todos[dateString] = [];
+                }
+                todos[dateString].push(todo);
+                todoInput.value = '';
+                updateTodoList();
+            }
+        }
+
+        function removeTodo(index) {
+            const dateString = selectedDate.toDateString();
+            if (todos[dateString]) {
+                todos[dateString].splice(index, 1);
+                updateTodoList();
+            }
+        }
+
+        function showApp(appName) {
+            console.log(`Showing ${appName} app`);
+        }
+
+        prevMonthButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar();
+        });
+
+        nextMonthButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar();
+        });
+
+        updateCalendar();
+        updateTodoList();
+
+        // Snake Game Code
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const scale = 20;
+        const rows = canvas.height / scale;
+        const columns = canvas.width / scale;
+
+        let snake;
+
+        (function setup() {
+            snake = new Snake();
+            fruit = new Fruit();
+            fruit.pickLocation();
+
+            window.setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                fruit.draw();
+                snake.update();
+                snake.draw();
+
+                if (snake.eat(fruit)) {
+                    fruit.pickLocation();
+                }
+
+                snake.checkCollision();
+            }, 250);
+        }());
+
+        window.addEventListener('keydown', ((evt) => {
+            const direction = evt.key.replace('Arrow', '');
+            snake.changeDirection(direction);
+        }));
+
+        function Snake() {
+            this.x = 0;
+            this.y = 0;
+            this.xSpeed = scale * 1;
+            this.ySpeed = 0;
+            this.total = 0;
+            this.tail = [];
+
+            this.draw = function() {
+                ctx.fillStyle = "#00FF00";  // Green snake
+                for (let i=0; i<this.tail.length; i++) {
+                    ctx.fillRect(this.tail[i].x, this.tail[i].y, scale, scale);
+                }
+
+                ctx.fillRect(this.x, this.y, scale, scale);
+            }
+
+            this.update = function() {
+                for (let i=0; i<this.tail.length - 1; i++) {
+                    this.tail[i] = this.tail[i+1];
+                }
+
+                this.tail[this.total - 1] = { x: this.x, y: this.y };
+
+                this.x += this.xSpeed;
+                this.y += this.ySpeed;
+
+                if (this.x > canvas.width) {
+                    this.x = 0;
+                }
+
+                if (this.y > canvas.height) {
+                    this.y = 0;
+                }
+
+                if (this.x < 0) {
+                    this.x = canvas.width;
+                }
+
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                }
+            }
+
+            this.changeDirection = function(direction) {
+                switch(direction) {
+                    case 'Up':
+                        this.xSpeed = 0;
+                        this.ySpeed = -scale * 1;
+                        break;
+                    case 'Down':
+                        this.xSpeed = 0;
+                        this.ySpeed = scale * 1;
+                        break;
+                    case 'Left':
+                        this.xSpeed = -scale * 1;
+                        this.ySpeed = 0;
+                        break;
+                    case 'Right':
+                        this.
