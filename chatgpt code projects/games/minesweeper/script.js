@@ -202,9 +202,9 @@ function changeBoardSize(size) {
             mineCount = 15;
             break;
         case 'large':
-            rows = 12;
-            cols = 12*1.5;
-            mineCount = 20;
+            rows = 15;
+            cols = 45;
+            mineCount = 60;
             break;
     }
     resetGame();
