@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jon's LLM Made Apps</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            Jon's LLM Made Apps
+        </header>
+        <div class="content-container">
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="#" onclick="showApp('calendar')">Calendar App</a></li>
+                    <li><a href="#" onclick="showApp('todo')">To-Do List</a></li>
+                    <li><a href="#" onclick="showApp('snake')">Snake Game</a></li>
+                </ul>
+            </nav>
+            <main class="main-content">
+                <div class="container">
+                    <div class="calendar">
+                        <div class="header">
+                            <button id="prevMonth">&lt;</button>
+                            <h2 id="currentMonth"></h2>
+                            <button id="nextMonth">&gt;</button>
+                        </div>
+                        <div class="days" id="calendarDays"></div>
+                    </div>
+                    <div class="todo">
+                        <h2>To-Do List</h2>
+                        <div id="selectedDate"></div>
+                        <input type="text" id="todoInput" placeholder="Add a new task">
+                        <button onclick="addTodo()">Add</button>
+                        <div id="todoList" class="todo-list"></div>
+                    </div>
+                </div>
+                <div id="snakeGame">
+                    <h2>Snake Game</h2>
+                    <canvas id="gameCanvas" width="400" height="400"></canvas>
+                    <p>Use arrow keys to control the snake. Eat the red food to grow!</p>
+                </div>       
+   		<div id="game-board"></div>
+		   <h1>Wordle Game</h1>
+    		   <input type="text" id="user-input" maxlength="5" placeholder="Enter a 5-letter word">
+    		   <button onclick="submitWord()">Submit</button>
+    		   <p id="message"></p>
+  		   <div id="word-list">
+     		 	 <h3>Update Word List:</h3>
+       		 	<textarea id="word-input" rows="10" cols="30">apple,grape,pearl,flame,beach</textarea>
+      		 	 <button onclick="updateWordList()">Update</button>
+   		   </div>
+    		   <div id="alphabet"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/wordle_script.js"></script>
+</html>
