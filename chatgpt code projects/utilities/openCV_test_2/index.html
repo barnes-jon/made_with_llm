@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenCV.js Test</title>
+    <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+
+</head>
+<body>
+    <h1>OpenCV.js Test</h1>
+    <p id="status">Loading OpenCV.js...</p>
+    <script>
+        function checkOpenCV() {
+            if (typeof cv === 'undefined') {
+                document.getElementById('status').textContent = 'Error: OpenCV.js is not available.';
+            } else {
+                cv.onRuntimeInitialized = () => {
+                    document.getElementById('status').textContent = 'OpenCV.js is ready.';
+                };
+            }
+        }
+
+        // Call the function to check OpenCV.js
+        checkOpenCV();
+    </script>
+</body>
+</html>
