@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenCV.js Test</title>
+    <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        canvas { border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>OpenCV.js Test</h1>
+    <input type="file" id="fileInput">
+    <canvas id="canvas"></canvas>
+    <script>
+        function onOpenCvReady() {
+            console.log('OpenCV.js is ready.');
+
+            document.getElementById('fileInput').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) {
+                    console.error('No file selected.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = new Image();
+                    imgElement.onload = function() {
+                        const canvas = document.getElementById('canvas');
+                        canvas.width = imgElement.width;
+                        canvas.height = imgElement.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(imgElement, 0, 0);
+
+                        // Create OpenCV Mat objects
+                        const src = cv.imread(canvas);
+                        const dst = new cv.Mat();
+                        cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY);
+                        cv.threshold(src, dst, 100, 200, cv.THRESH_BINARY);
+                        cv.imshow(canvas, dst);
+
+                        // Free memory
+                        src.delete();
+                        dst.delete();
+                    };
+                    imgElement.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        if (typeof cv !== 'undefined') {
+            cv.onRuntimeInitialized = onOpenCvReady;
+        } else {
+            document.body.innerHTML += '<p>Error: OpenCV.js is not available.</p>';
+        }
+    </script>
+</body>
+</html>
