@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Minesweeper</h1>
+    <div id="controls">
+        <button id="reset-btn">Reset Game</button>
+        <div id="mine-counter">Mines left: <span id="count">10</span></div>
+        <div id="size-buttons">
+            <button data-size="small">Small</button>
+            <button data-size="medium">Medium</button>
+            <button data-size="large">Large</button>
+        </div>
+        <div id="time">0</div>
+        <div id="message"></div>
+    </div>
+    <div id="game-board"></div>
+    <div id="mine-adjust-controls" style="display:none;">
+        <button id="mine-decrease">-</button>
+        <span id="mine-count">10</span>
+        <button id="mine-increase">+</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
