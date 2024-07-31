@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonora Land Ownership Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            height: calc(100% - 50px);
+            width: 100%;
+        }
+        #controls {
+            height: 50px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-btn {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .control-btn.active {
+            background-color: #45a049;
+        }
+        #error-message {
+            position: absolute;
+            top: 60px;
+            left: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button id="panBtn" class="control-btn active">Pan</button>
+        <button id="infoBtn" class="control-btn">Get Info</button>
+    </div>
+    <div id="error-message"></div>
+    <div id="map"></div>
+
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([29.2972, -110.3309], 7); // Centered on Sonora, Mexico
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Variable to store the GeoJSON layer
+        var geojsonLayer;
+
+        // Function to load and display GeoJSON data
+        function loadGeoJSON() {
+            // Replace 'path/to/your/converted_file.geojson' with the actual path to your converted GeoJSON file
+            fetch('sonora-geojson.geojson')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("GeoJSON data loaded successfully:", data);
+                    geojsonLayer = L.geoJSON(data, {
+                        style: {
+                            fillColor: '#3388ff', // Single blue color for all polygons
+                            color: '#228B22',     // Forest green border
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 0.7
+                        },
+                        onEachFeature: onEachFeature
+                    }).addTo(map);
+                    map.fitBounds(geojsonLayer.getBounds());
+                    console.log("GeoJSON layer added to map");
+                })
+                .catch(error => {
+                    console.error("Error loading GeoJSON:", error);
+                    document.getElementById('error-message').style.display = 'block';
+                    document.getElementById('error-message').textContent = `Error loading GeoJSON: ${error.message}`;
+                });
+        }
+
+        // Function to handle feature interactions
+        function onEachFeature(feature, layer) {
+            layer.on({
+                click: showInfo
+            });
+        }
+
+        // Function to show info when a feature is clicked
+        function showInfo(e) {
+            if (document.getElementById('infoBtn').classList.contains('active')) {
+                var layer = e.target;
+                var properties = layer.feature.properties;
+                var popupContent = '<h4>Land Ownership Information</h4>';
+                
+                for (var key in properties) {
+                    popupContent += '<strong>' + key + ':</strong> ' + properties[key] + '<br>';
+                }
+
+                layer.bindPopup(popupContent).openPopup();
+            }
+        }
+
+        // Load GeoJSON data
+        loadGeoJSON();
+
+        // Control button functionality
+        var panBtn = document.getElementById('panBtn');
+        var infoBtn = document.getElementById('infoBtn');
+
+        panBtn.addEventListener('click', function() {
+            this.classList.add('active');
+            infoBtn.classList.remove('active');
+            map.dragging.enable();
+            map.touchZoom.enable();
+            map.doubleClickZoom.enable();
+            map.scrollWheelZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+        });
+
+        infoBtn.addEventListener('click', function() {
+            this.classList.add('active');
+            panBtn.classList.remove('active');
+            map.dragging.disable();
+            map.touchZoom.disable();
+            map.doubleClickZoom.disable();
+            map.scrollWheelZoom.disable();
+            map.boxZoom.disable();
+            map.keyboard.disable();
+        });
+    </script>
+</body>
+</html>
