@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter and Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .counter, .stopwatch {
+            margin: 20px 0;
+            text-align: center;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .stopwatch-time {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Simple Counter and Stopwatch</h1>
+
+    <div class="counter">
+        <h2>Counter</h2>
+        <p id="count">0</p>
+        <button onclick="decrement()">-1</button>
+        <button onclick="increment()">+1</button>
+    </div>
+
+    <div class="stopwatch">
+        <h2>Stopwatch</h2>
+        <div class="stopwatch-time" id="time">00:00:00</div>
+        <button id="start" onclick="startStopwatch()">Start</button>
+        <button id="stop" onclick="stopStopwatch()" disabled>Stop</button>
+        <button onclick="resetStopwatch()">Reset</button>
+    </div>
+
+    <script>
+        // Counter functionality
+        let count = 0;
+        const countDisplay = document.getElementById('count');
+
+        function increment() {
+            count++;
+            countDisplay.textContent = count;
+        }
+
+        function decrement() {
+            count--;
+            countDisplay.textContent = count;
+        }
+
+        // Stopwatch functionality
+        let startTime, updateTime, elapsedTime = 0;
+        const timeDisplay = document.getElementById('time');
+        const startButton = document.getElementById('start');
+        const stopButton = document.getElementById('stop');
+
+        function startStopwatch() {
+            startTime = Date.now() - elapsedTime;
+            updateTime = setInterval(updateTimeDisplay, 1000);
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        }
+
+        function stopStopwatch() {
+            clearInterval(updateTime);
+            elapsedTime = Date.now() - startTime;
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
+
+        function resetStopwatch() {
+            clearInterval(updateTime);
+            startTime = null;
+            elapsedTime = 0;
+            timeDisplay.textContent = '00:00:00';
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
+
+        function updateTimeDisplay() {
+            elapsedTime = Date.now() - startTime;
+            const totalSeconds = Math.floor(elapsedTime / 1000);
+            const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+    </script>
+
+</body>
+</html>
