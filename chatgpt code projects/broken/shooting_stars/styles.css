@@ -1,0 +1,59 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #000;
+}
+
+.grass {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    background-color: #009900;
+}
+
+.sky {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 80%;
+    background-color: #000; /* Ensure the sky is pure black */
+    overflow: hidden;
+}
+
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMSAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9Ii41IiBjeT0iLjUiIHI9Ii4wNSIgZmlsbD0id2hpdGUiIC8+PGNpcmNsZSBjeD0iLjgiIGN5PSIuMSIgcmFkaXVzPSIuMSIgZmlsbD0id2hpdGUiIC8+PHBhdGggZD0iTTAgLjVoMWwtLjUtLjV6IiBmaWxsPSJ3aGl0ZSIgLz48L3N2Zz4=') repeat;
+    background-size: 1px 1px;
+}
+
+.shooting-star {
+    position: absolute;
+    top: 20%;
+    left: 100%;
+    width: 2px;
+    height: 200px;
+    background: linear-gradient(to bottom, transparent, white, transparent);
+    transform: rotate(-45deg);
+    animation: shooting-star 3s ease-in-out infinite;
+}
+
+.shooting-star.delay {
+    animation-delay: 2s;
+}
+
+@keyframes shooting-star {
+    0% {
+        left: 100%;
+        top: 20%;
+    }
+    100% {
+        left: -100%;
+        top: 80%;
+    }
+}
